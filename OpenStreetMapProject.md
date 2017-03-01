@@ -43,7 +43,7 @@ When I first tried to load my .csv file into the nodes table, I received an erro
 ```
 Then I inserted my node records into the temporary table:
 ```SQL
-import nodes.csv TEMP;
+import nodes.csv TEMP
 ```
 Then I deleted the first row which had string data from the header of the .csv file:
 ```SQL
