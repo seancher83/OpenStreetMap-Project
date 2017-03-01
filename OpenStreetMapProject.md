@@ -30,4 +30,26 @@ for item in node_attr_fields:
 After doing so, my sample osm file processed without error.
 
 ### Datatype mismatch
-When I first tried to load my .csv file into the nodes table, I received an error: INSERT failed: datatype mismatch. Once I did some research I realized that this was because my .csv files had header rows.  I deleted those in order to fix the issue.
+When I first tried to load my .csv file into the nodes table, I received an error: INSERT failed: datatype mismatch. Once I did some research I realized that this was because my .csv files had header rows.  In order to import this file, I first created a temporary table:
+```SQL
+ CREATE Table TEMP{
+ "id" TEXT,
+ "lat" TEXT,
+ "lon" TEXT,
+ "user" TEXT,
+ "uid" TEXT,
+ "version" TEXT,
+ "timestamp" TEXT);
+```
+Then I inserted my node records into the temporary table:
+```SQL
+import nodes.csv TEMP;
+```
+Then I deleted the first row which had string data from the header of the .csv file:
+```SQL
+DELETE FROM temp WHERE id = "id";
+```
+Then finally, I could insert the TEMP records into Nodes:
+```SQL
+INSERT INTO nodes(id, lat, lon, user, uid, version, changeset, timestamp) SELECT id, lat, lon, user, uid, version, changeset, timestamp FROM TEMP;
+```
