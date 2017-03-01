@@ -18,12 +18,12 @@ After downloading the sample data I began to run the sample .osm file through my
 ## Keyerror: Id 
 My code was giving me a keyerror: 'ID'.  I realized that this was because there were certain data points entered without proper id codes.  In order to remediate that problem, I chose to input the code of '9999999' rather than omit the code entirely.  I would rather omit this id code, than realize I omitted records in error. 
 
-'''Python
+```Python
 for item in node_attr_fields:
                 try:
                     node_attribs[item] = element.attrib[item]
                 except:
                     node_attribs[item] = '9999999'
-'''
+```
 
 After doing so, my sample osm file processed without error.
