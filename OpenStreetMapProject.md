@@ -14,6 +14,7 @@ I was going to choose my how area, but it appears as though the file would be mu
 After downloading the sample data I began to run the sample .osm file through my python code to begin to parse the tags appropriately. Here are the problems that I noticed:
 
 * Keyerror: ID 
+* datatype mismatch
  
 ## Keyerror: Id 
 My code was giving me a keyerror: 'ID'.  I realized that this was because there were certain data points entered without proper id codes.  In order to remediate that problem, I chose to input the code of '9999999' rather than omit the code entirely.  I would rather omit this id code, than realize I omitted records in error. 
@@ -27,3 +28,6 @@ for item in node_attr_fields:
 ```
 
 After doing so, my sample osm file processed without error.
+
+## Datatype mismatch
+When I first tried to load my .csv file into the nodes table, I received an error: INSERT failed: datatype mismatch. Once I did some research I realized that this was because my .csv files had header rows.  I deleted those in order to fix the issue.
