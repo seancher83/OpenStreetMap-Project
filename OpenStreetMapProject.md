@@ -15,6 +15,7 @@ After downloading the sample data I began to run the sample .osm file through my
 
 * Keyerror: ID - Python code gave error messages
 * datatype mismatch -  SQL import gave error messages
+* postcode standardization - SQL search shows errors in input
  
 ### Keyerror: Id 
 My code was giving me a keyerror: 'ID'.  I realized that this was because there were certain data points entered without proper id codes.  In order to remediate that problem, I chose to input the code of '9999999' rather than omit the code entirely.  I would rather omit this id code, than realize I omitted records in error. 
@@ -53,7 +54,34 @@ Then finally, I could insert the TEMP records into Nodes:
 ```SQL
 INSERT INTO nodes(id, lat, lon, user, uid, version, changeset, timestamp) SELECT id, lat, lon, user, uid, version, changeset, timestamp FROM TEMP;
 ```
+### Postcode Errors
+I wanted to find out if the postalcode field was standardized so I performed a query to pull all postal codes from node_tags and way_tags: 
+```sql
+SELECT tags.value, count(*) as count
+FROM (SELECT * from nodes_tags UNION ALL
+		SELECT * from ways_tags) tags
+WHERE tags.key = 'postcode'
+GROUP BY tags.value
+ORDER BY count DESC
+;
+```
+This produced a list of postal codes that are pretty clean, but not perfect.  I noticed a few instances like the following:
+```
+"Lacey, WA 98503"
+```
+I will fix this in my Python code. 
+
+I also see some instances of the postal code including the +4 like:
+```
+"98444-1858
+```
+
 ## Findings
+### Overview Statistics
+* Size of the file:
+* Number of unique users
+* number of nodes and ways
+* Number of type of nodes
 ### City Count
 I wanted to confirm, that the map was including other towns outside of Seattle, as I suspected by looking at the shaded region.
 In order to figure this out, I needed to look at both ways_tags and node_tags that had the value of "city":
