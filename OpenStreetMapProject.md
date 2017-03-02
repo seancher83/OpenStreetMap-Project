@@ -7,7 +7,7 @@ Seattle, WA, United States
 * https://mapzen.com/data/metro-extracts/metro/seattle_washington/
 
 
-I was going to choose my how area, but it appears as though the file would be much too small to satisfy the requirements of this project. As a result, I chose Seattle, a city that I am comfortable with.  I am interested in seeing what queries can reveal.
+I was going to choose my how area, but it appears as though the file would be much too small to satisfy the requirements of this project. As a result, I chose Seattle, a city that I am comfortable with.  The selection from Mapzen appears to include the towns surrounding Seattle as well as Seattle. I am interested in seeing what queries can reveal.
 
 ## Problems with Data
 
@@ -15,6 +15,7 @@ After downloading the sample data I began to run the sample .osm file through my
 
 * Keyerror: ID 
 * datatype mismatch
+* City input has errors
  
 ### Keyerror: Id 
 My code was giving me a keyerror: 'ID'.  I realized that this was because there were certain data points entered without proper id codes.  In order to remediate that problem, I chose to input the code of '9999999' rather than omit the code entirely.  I would rather omit this id code, than realize I omitted records in error. 
@@ -53,3 +54,20 @@ Then finally, I could insert the TEMP records into Nodes:
 ```SQL
 INSERT INTO nodes(id, lat, lon, user, uid, version, changeset, timestamp) SELECT id, lat, lon, user, uid, version, changeset, timestamp FROM TEMP;
 ```
+## City input has errors
+Once I loaded a small sample of my data into SQL, I began exploring.  The first thing that I searched for was count of most popular cities.  I would suspect that "Seattle" would be very high which it was.  I also find that there were numerous instances of numbers as cities.  "2" appeared 238 times, which was the seventh most entered city.  
+
+In order to figure this out I searched for ways_tags that had key values including "city":
+```SQL
+SELECT *
+FROM ways_tags
+WHERE ways_tags.key LIKE '%city' and ways_tags.value = 2
+LIMIT 10;
+```
+Here are the results:
+```
+"36348043, capacity, 2, "regular
+"61322441, capacity, 2, "regular
+```
+
+Apparently there is a key value for "capacity" which was giving me false hits for "city" in the way that I used LIKE. 
