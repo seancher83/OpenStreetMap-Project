@@ -11,11 +11,10 @@ I was going to choose my how area, but it appears as though the file would be mu
 
 ## Problems with Data
 
-After downloading the sample data I began to run the sample .osm file through my python code to begin to parse the tags appropriately. Here are the problems that I noticed:
+After downloading the sample data I began to run the sample .osm file through my python code to begin to parse the tags appropriately.  Then I began to import those .csv files into SQL in order to analyze the data. Here are the problems that I noticed:
 
-* Keyerror: ID 
-* datatype mismatch
-* City input has errors
+* Keyerror: ID - Python code gave error messages
+* datatype mismatch -  SQL import gave error messages
  
 ### Keyerror: Id 
 My code was giving me a keyerror: 'ID'.  I realized that this was because there were certain data points entered without proper id codes.  In order to remediate that problem, I chose to input the code of '9999999' rather than omit the code entirely.  I would rather omit this id code, than realize I omitted records in error. 
@@ -54,20 +53,17 @@ Then finally, I could insert the TEMP records into Nodes:
 ```SQL
 INSERT INTO nodes(id, lat, lon, user, uid, version, changeset, timestamp) SELECT id, lat, lon, user, uid, version, changeset, timestamp FROM TEMP;
 ```
-## City input has errors
-Once I loaded a small sample of my data into SQL, I began exploring.  The first thing that I searched for was count of most popular cities.  I would suspect that "Seattle" would be very high which it was.  I also find that there were numerous instances of numbers as cities.  "2" appeared 238 times, which was the seventh most entered city.  
-
-In order to figure this out I searched for ways_tags that had key values including "city":
+## Findings
+### City Count
+I wanted to confirm, that the map was including other towns outside of Seattle, as I suspected by looking at the shaded region.
+In order to figure this out, I needed to look at both ways_tags and node_tags that had the value of "city":
 ```SQL
-SELECT *
-FROM ways_tags
-WHERE ways_tags.key LIKE '%city' and ways_tags.value = 2
-LIMIT 10;
-```
-Here are the results:
-```
-"36348043, capacity, 2, "regular
-"61322441, capacity, 2, "regular
+SELECT tags.value, count(*) as count
+FROM (SELECT * from nodes_tags UNION ALL
+		SELECT * from ways_tags) tags
+WHERE tags.key = 'city'
+GROUP BY tags.value
+ORDER BY count DESC
+;
 ```
 
-Apparently there is a key value for "capacity" which was giving me false hits for "city" in the way that I used LIKE. 
