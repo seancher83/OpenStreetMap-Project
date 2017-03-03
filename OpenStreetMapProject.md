@@ -32,6 +32,8 @@ After doing so, my sample osm file processed without error.
 
 ### Datatype mismatch
 When I first tried to load my .csv file into the nodes table, I received an error: INSERT failed: datatype mismatch. Once I did some research I realized that this was because my .csv files had header rows.  In order to import this file, I first created a temporary table:
+
+for nodes:
 ```SQL
  CREATE Table TEMP(
  "id" TEXT,
@@ -43,6 +45,7 @@ When I first tried to load my .csv file into the nodes table, I received an erro
  "changeset" TEXT,
  "timestamp" TEXT);
 ```
+
 Then I inserted my node records into the temporary table:
 ```SQL
 .import nodes.csv TEMP
@@ -54,6 +57,25 @@ DELETE FROM TEMP Where ROWID = 1;
 Then finally, I could insert the TEMP records into Nodes:
 ```SQL
 INSERT INTO nodes(id, lat, lon, user, uid, version, changeset, timestamp) SELECT id, lat, lon, user, uid, version, changeset, timestamp FROM TEMP;
+```
+
+
+The same occurred for ways:
+```SQL
+ CREATE Table TEMP(
+ "id" TEXT,
+ "user" TEXT,
+ "uid" TEXT,
+ "version" TEXT,
+ "changeset" TEXT,
+ "timestamp" TEXT);
+ 
+ .import ways.csv TEMP
+ 
+ DELETE FROM TEMP Where ROWID = 1;
+```
+```SQL
+INSERT INTO nodes(id, user, uid, version, changeset, timestamp) SELECT id, user, uid, version, changeset, timestamp FROM TEMP;
 ```
 ### Postcode Errors
 I wanted to find out if the postalcode field was standardized so I performed a query to pull all postal codes from node_tags and way_tags: 
