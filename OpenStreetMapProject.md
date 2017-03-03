@@ -40,6 +40,7 @@ When I first tried to load my .csv file into the nodes table, I received an erro
  "user" TEXT,
  "uid" TEXT,
  "version" TEXT,
+ "changeset" TEXT,
  "timestamp" TEXT);
 ```
 Then I inserted my node records into the temporary table:
