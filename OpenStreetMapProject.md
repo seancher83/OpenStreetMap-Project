@@ -49,7 +49,7 @@ Then I inserted my node records into the temporary table:
 ```
 Then I deleted the first row which had string data from the header of the .csv file:
 ```SQL
-DELETE FROM temp WHERE id = "id";
+DELETE FROM TEMP Where ROWID = 1;
 ```
 Then finally, I could insert the TEMP records into Nodes:
 ```SQL
