@@ -33,7 +33,7 @@ After doing so, my sample osm file processed without error.
 ### Datatype mismatch
 When I first tried to load my .csv file into the nodes table, I received an error: INSERT failed: datatype mismatch. Once I did some research I realized that this was because my .csv files had header rows.  In order to import this file, I first created a temporary table:
 ```SQL
- CREATE Table TEMP{
+ CREATE Table TEMP(
  "id" TEXT,
  "lat" TEXT,
  "lon" TEXT,
