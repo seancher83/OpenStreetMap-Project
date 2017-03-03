@@ -109,6 +109,8 @@ def process_zip(key, key_value, zip_re = ZIP_CODE_START):
     return key_value
 ```
 
+This appeared to resolve the issue for most all cases that can be easily deciphered.  
+
 ## Findings
 ### Overview Statistics
 * Size of the file:
