@@ -69,11 +69,21 @@ This produced a list of postal codes that are pretty clean, but not perfect.  I 
 ```
 "Lacey, WA 98503"
 ```
-I will fix this in my Python code. 
-
 I also see some instances of the postal code including the +4 like:
 ```
 "98444-1858
+```
+I will fix this in my python code with the following function:
+```SQL
+# Regular expression to find zip code like numbers
+ZIP_CODE_START = re.compile('[0-9]{5}')
+
+# Function grabs 5 digit zip codes starting with two digits.
+def process_zip(key, key_value, zip_re = ZIP_CODE_START):
+    if 'postcode' in key:
+        if re.search(zip_re, key_value):
+            return str(re.findall(zip_re, key_value)[0])
+    return key_value
 ```
 
 ## Findings
