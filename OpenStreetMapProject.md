@@ -113,7 +113,7 @@ This appeared to resolve the issue for most all cases that can be easily deciphe
 
 ## Findings
 ### Overview Statistics
-* Size of the file:
+* Size of the file: 1.68GB
 * Number of unique users
 * number of nodes and ways
 * Number of type of nodes
