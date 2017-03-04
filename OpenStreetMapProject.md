@@ -75,7 +75,7 @@ The same occurred for ways:
  DELETE FROM TEMP Where ROWID = 1;
 ```
 ```SQL
-INSERT INTO nodes(id, user, uid, version, changeset, timestamp) SELECT id, user, uid, version, changeset, timestamp FROM TEMP;
+INSERT INTO ways(id, user, uid, version, changeset, timestamp) SELECT id, user, uid, version, changeset, timestamp FROM TEMP;
 ```
 ### Postcode Errors
 I wanted to find out if the postalcode field was standardized so I performed a query to pull all postal codes from node_tags and way_tags: 
