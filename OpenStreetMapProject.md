@@ -1,4 +1,7 @@
 # OpenStreetMap Udacity Project
+## Purpose
+The purpose of this project is to write a Python code in order to process xml data of an OpenStreetMap area of our choice in order to find errors in the data and to use SQL in order to find information regarding the processed data.
+
 
 ## Map Area
 
@@ -146,6 +149,7 @@ ORDER BY count DESC
 ;
 ```
 Here are the resulting nodes_tags and ways_tags combined:
+```
 Seattle,203377
 Kirkland,42285
 Mount Vernon,11729
@@ -156,7 +160,7 @@ Colwood,1985
 Sooke,1600
 Esquimalt,1495
 View Royal,998
-
+```
 This data, although listed as "Seattle" does indeed actually include the greater metropolitan area.
 
 ## Zip Codes
@@ -171,7 +175,7 @@ ORDER BY count DESC
 ;
 ```
 Here are the resulting zip codes, along with the count of entries of each zip code:
-
+```
 98034,22954
 98033,19369
 98115,18127
@@ -182,3 +186,4 @@ Here are the resulting zip codes, along with the count of entries of each zip co
 98105,9928
 98144,9289
 98108,9255
+```
