@@ -115,7 +115,23 @@ This appeared to resolve the issue for most all cases that can be easily deciphe
 ### Overview Statistics
 * Size of the file: 1.68GB
 * Number of unique users
+
 * number of nodes and ways
+To find nodes:
+```SQL
+SELECT count(*) 
+FROM nodes;
+```
+397821 Nodes
+
+To find ways:
+To find nodes:
+```SQL
+SELECT count(*) 
+FROM ways;
+```
+744335 ways
+
 * Number of type of nodes
 ### City Count
 I wanted to confirm, that the map was including other towns outside of Seattle, as I suspected by looking at the shaded region.
@@ -129,4 +145,40 @@ GROUP BY tags.value
 ORDER BY count DESC
 ;
 ```
+Here are the resulting nodes_tags and ways_tags combined:
+Seattle,203377
+Kirkland,42285
+Mount Vernon,11729
+Saanich,11547
+Langford,2806
+Oak Bay,2298
+Colwood,1985
+Sooke,1600
+Esquimalt,1495
+View Royal,998
 
+This data, although listed as "Seattle" does indeed actually include the greater metropolitan area.
+
+## Zip Codes
+I also want to check and see what the most commonly entered zip code is:
+```SQL
+SELECT tags.value, count(*) as count
+FROM (SELECT * from nodes_tags UNION ALL
+		SELECT * from ways_tags) tags
+WHERE tags.key = 'postcode'
+GROUP BY tags.value
+ORDER BY count DESC
+;
+```
+Here are the resulting zip codes, along with the count of entries of each zip code:
+
+98034,22954
+98033,19369
+98115,18127
+98103,16844
+98118,14384
+98117,13559
+98125,12133
+98105,9928
+98144,9289
+98108,9255
