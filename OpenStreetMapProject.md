@@ -1,6 +1,6 @@
 # OpenStreetMap Udacity Project
 ## Purpose
-The purpose of this project is to write a Python code in order to process xml data of an OpenStreetMap area of our choice in order to find errors in the data and then to use SQL in order to find information regarding the processed data.
+The purpose of this project is to write Python code in order to process xml data of an OpenStreetMap area of our choice in order to find errors in the data and then to use SQL in order to discover information regarding the processed data.
 
 
 ## Map Area
@@ -10,7 +10,7 @@ Seattle, WA, United States
 * https://mapzen.com/data/metro-extracts/metro/seattle_washington/
 
 
-I was going to choose my how area, but it appears as though the file would be much too small to satisfy the requirements of this project. As a result, I chose Seattle, a city that I am familiar with.  The selection from Mapzen appears to include the towns surrounding Seattle as well as Seattle. I am interested in seeing what queries can reveal.
+I was going to choose my home area, but it appears as though the file would be much too small to satisfy the requirements of this project. As a result, I chose Seattle, a city that I am familiar with.  The selection from Mapzen appears to include the towns surrounding Seattle as well as Seattle. I am interested in seeing what queries can reveal.
 
 ## Problems with Data
 
@@ -64,8 +64,7 @@ Then finally, I could insert the TEMP records into Nodes:
 INSERT INTO nodes(id, lat, lon, user, uid, version, changeset, timestamp) SELECT id, lat, lon, user, uid, version, changeset, timestamp FROM TEMP;
 ```
 
-
-The same occurred for the ways table:
+The same occurred for the ways table so I followed a similar process:
 ```SQL
  CREATE Table TEMP(
  "id" TEXT,
@@ -114,7 +113,7 @@ def process_zip(key, key_value, zip_re = ZIP_CODE_START):
     return key_value
 ```
 
-This appeared to resolve the issue for most all cases that can be easily deciphered.  
+This appeared to resolve the issue for most all cases that can be easily deciphered. Having felt confident that the data is acceptably cleaned, I proceeded to process the entire osm file. 
 
 ## Findings
 ### Overview Statistics
@@ -132,7 +131,7 @@ FROM (SELECT uid from nodes UNION ALL
 SELECT uid from ways) users
 ;
 ```
-2897 Unique users have entered data
+2897 Unique users have entered data.
 
 * number of nodes and ways
 To find nodes:
@@ -140,18 +139,17 @@ To find nodes:
 SELECT count(*) 
 FROM nodes;
 ```
-397821 Nodes
+397821 nodes have been entered.
 
 To find ways:
 ```SQL
 SELECT count(*) 
 FROM ways;
 ```
-744335 ways
+744335 ways have been entered.  
 
 ### City Count
-I wanted to confirm, that the map was including other towns outside of Seattle, as I suspected by looking at the shaded region.
-In order to figure this out, I needed to look at both ways_tags and node_tags that had the value of "city":
+I wanted to confirm, that the map was including other towns outside of Seattle, as I suspected by looking at the shaded region. In order to figure this out, I needed to look at both ways_tags and node_tags that had the value of "city":
 ```SQL
 SELECT tags.value, count(*) as count
 FROM (SELECT * from nodes_tags UNION ALL
@@ -174,7 +172,7 @@ Sooke,1600
 Esquimalt,1495
 View Royal,998
 ```
-This data, although listed as "Seattle" does indeed actually include the greater metropolitan area.
+This Mapzen data, although listed as "Seattle" does indeed actually include the greater metropolitan area.  
 
 ### Zip Codes
 I also want to check and see what the most commonly entered zip code is:
@@ -243,7 +241,7 @@ Taco Bell,23
 
 ```
 
-I am not altogether surprisded by the number.  There are 1273 places listed as cafe's while there are 1127 places listed as fast_food establishments.  People in Seattle apparently love their coffee, in line with the common perception.
+I am not altogether surprisded by the number.  There are 1273 places listed as cafe's while there are 1127 places listed as fast_food establishments.  People in Seattle apparently love their coffee, in line with the common perception.  It is a little bit surprising that there are so many more Subway's than there are McDonald's.  I would have thought that those two numbers would be closer together.  
 
 ### Number of gyms
 
@@ -254,7 +252,7 @@ FROM nodes_tags
 WHERE value = 'gym'
 ;
 ```
-Unfortunately this only returns 3 gyms.  That is obviously incorrect.  I would suspect that there are numerous tag value's being entered for gyms.  I've seen fitness_centre and spa as example of synonyms that were perhaps used. This particular aspect of this data seems to be lacking. 
+Unfortunately this only returns 3 gyms.  That is obviously incorrect.  I would suspect that one of the reasons is that there are numerous tag value's being entered for gyms.  I've seen fitness_centre and spa as example of synonyms that were perhaps used. This particular aspect of this data seems to be lacking.
 
 ## Conclusion
-It appears as though most of the data is pretty clean with the exception of a few edge case instances like the zip codes needing cleaning.  It appears to me as though the amenity values could benefit by more standardization in terms of the categories.  When you look at the list of amenities you can find that categories differ for similar items, as in the case of the gyms above.  As another example, 'Kindergarten' is listed as an amenity, while 'school' is also listed as an amenity.  I would recommend changing school to something more specific as an example.  
+It appears as though most of the data is pretty clean with the exception of a few edge case instances like the zip codes needing cleaning.  It appears to me as though the amenity values could benefit by more standardization in terms of the categories.  When you look at the list of amenities you can find that categories differ for similar items, as in the case of the gyms above.  As another example, 'Kindergarten' is listed as an amenity, while 'school' is also listed as an amenity.  I would recommend changing 'school' to something more specific like 'elementary_school' as an example. 
